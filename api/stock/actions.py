@@ -91,15 +91,17 @@ class StockActions(object):
             if not user_details:
                 raise Exception("User not found")
             consumed_amount = float(quantity) * float(view_stock["price"])
+            user_updated_balance = user_details.balance_amount
             if buy_flag:
                 user_updated_balance = user_details.balance_amount - consumed_amount
                 if user_updated_balance < 0:
                     raise Exception("Not enough funds available in your account")
-            else:
-                user_updated_balance = user_details.balance_amount + consumed_amount
-            self.user_api.update(dict(balance_amount=user_updated_balance), dict(id=user_id))
             self.stock_aggregate(buy_flag=buy_flag, symbol=symbol, user_id=user_id, quantity=quantity)
             self.stock_history.create(dict(user_id=user_id, symbol=symbol, quantity=quantity, buy_flag=buy_flag))
+            if not buy_flag:
+                user_updated_balance = user_details.balance_amount + consumed_amount
+            self.user_api.update(dict(balance_amount=user_updated_balance), dict(id=user_id))
+
         except Exception as e:
             raise Exception(e)
 
