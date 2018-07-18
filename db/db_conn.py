@@ -127,10 +127,6 @@ class StockHistoryApi(object):
         self.session.commit()
         return True
 
-    # def get_Distinct(self):
-    #     stock = self.session.query(StockHistory.id).scalar()
-    #     print(zip(*stock)[0])
-
 
 class StockAggregateApi(object):
     def __init__(self):
@@ -177,4 +173,3 @@ class StockAggregateApi(object):
         self.session.add(stock_aggregate)
         self.session.commit()
         return True
-# StockHistoryApi().get_Distinct()
