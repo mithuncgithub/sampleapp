@@ -1,0 +1,19 @@
+{% block content %}
+
+<script>
+    function myFunction() {
+    var ask = window.confirm("{{message}}");
+    if (ask) {
+        window.location.href = "{{redirect_url}}";
+
+    }
+    else {
+        window.location.href = "{{redirect_url}}";
+    }
+}
+    x = myFunction();
+    document.getElementById("demo").innerHTML = x;
+</script>
+<p id = "demo"></p>
+
+{% endblock %}

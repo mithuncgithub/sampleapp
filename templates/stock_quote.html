@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Quote</title>
+    <style>
+        .user {
+        text-align: right;
+        color: blue;
+      }
+      table, th, td {
+          border: 1px solid black;
+      }
+    </style>
+</head>
+<body>
+<h1 class="Stock">Stock</h1>
+  <hr>
+  <p class="user">Welcome {{name}}</p>
+  <form action="http://localhost:5000/logout" method="get">
+    <input type="submit" style="float: right;" value="Log out">
+  </form>
+  <br>
+  <br>
+  <table>
+  <!-- table header -->
+  {% if stock_quote %}
+  <tr>
+     {% for key in stock_quote %}
+     <th> {{ key }} </th>
+     {% endfor %}
+  </tr>
+  {% endif %}
+
+  <!-- table rows -->
+  <tr>
+     {% for value in stock_quote.values() %}
+     <td> {{ value }} </td>
+     {% endfor %}
+  </tr>
+
+</table>
+<form onsubmit="return confirm('Do you really want to buy the stock');"
+      action="http://localhost:5000/stock/buy" method="post">
+    <input type="hidden" value="{{user_id}}" name="id">
+    <input type="hidden" value="{{stock_quote['symbol']}}" name="symbol">
+    <input type="hidden" value=1 name="buy_flag">
+    Quantity<input type="number" min="0" name="quantity" value="0">
+    <input type="submit" value="Buy">
+</form>
+<form onsubmit="return confirm('Do you really want to sell the stock');"
+      action="http://localhost:5000/stock/buy" method="post">
+    <input type="hidden" value="{{user_id}}" name="id">
+    <input type="hidden" value="{{stock_quote['symbol']}}" name="symbol">
+    <input type="hidden" value=0 name="buy_flag">
+    Quantity<input type="number" min="0" name="quantity" value="0">
+    <input type="submit" value="Sell">
+</form>
+{% block content %}
+    {% endblock %}
+</body>
+</html>

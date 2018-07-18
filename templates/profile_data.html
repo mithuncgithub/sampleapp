@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stock</title>
+    <style>
+      .user {
+        text-align: right;
+        color: blue;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+  </head>
+  <body>
+  <h1 class="Stock">Stock</h1>
+  <hr>
+  <p class="user">Welcome {{name}}</p>
+  <form action="http://localhost:5000/profile" method="get">
+    <input type="submit" style="float: right;" value="Profile View">
+  </form>
+  <form action="http://localhost:5000/logout" method="get">
+    <input type="submit" style="float: right;" value="Log out">
+  </form>
+    <table>
+  <!-- table header -->
+  {% if profile_data %}
+  <tr>
+     {% for key in profile_data[0] %}
+     <th> {{ key }} </th>
+     {% endfor %}
+      <th>Action</th>
+  </tr>
+  {% endif %}
+
+  <!-- table rows -->
+  {% for dict_item in profile_data %}
+  <tr align="center">
+     {% for value in dict_item.values() %}
+     <td> {{ value }}
+    </td>
+     {% endfor %}
+      <td><form action="http://localhost:5000/stock/stock_aggregate" method="get">
+          <input type="submit" value="View Stock">
+            <input type="hidden" value="{{dict_item.values()[0]}}" name="stock_user_id">
+      </form></td>
+  </tr>
+  {% endfor %}
+</table>
+  <br><br><br><br>
+  {% block content %}
+    {% endblock %}
+  </body>
+</html>

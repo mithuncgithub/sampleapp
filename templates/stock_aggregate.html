@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stock</title>
+    <style>
+      .user {
+        text-align: right;
+        color: blue;
+      }
+      form {
+        text-align: center;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+  </head>
+  <body>
+  <h1 class="Stock">Stock</h1>
+  <hr>
+  <p class="user">Welcome {{name}}</p>
+  <form action="http://localhost:5000/profile" method="get">
+    <input type="submit" style="float: right;" value="Profile View">
+  </form>
+  <form action="http://localhost:5000/logout" method="get">
+    <input type="submit" style="float: right;" value="Log out">
+  </form>
+  <br>
+  <br>
+  <form action="http://localhost:5000/stock/view" method="get">
+    Ticker Symbol:<input type="text" name="symbol">
+    <input type="submit" value="Get Quote">
+  </form>
+  <br><br>
+  <table>
+  <!-- table header -->
+  {% if stock_aggregate %}
+  <tr>
+     {% for key in stock_aggregate[0] %}
+     <th> {{ key }} </th>
+     {% endfor %}
+  </tr>
+  {% endif %}
+
+  <!-- table rows -->
+  {% for dict_item in stock_aggregate %}
+  <tr align="center">
+     {% for value in dict_item.values() %}
+     <td> {{ value }} </td>
+     {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+  <br><br><br><br>
+  {% block content %}
+    {% endblock %}
+  </body>
+</html>

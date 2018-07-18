@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Login</title>
+    <style>
+    h1 {
+        text-align: center;
+    }
+    form {
+        color: red;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <h1>User Login</h1>
+    <br>
+    <form action="http://localhost:5000/login" method="post">
+        Username:<input type="text" name="username">
+        <br>
+        Password:<input type="password" name="password">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
