@@ -26,13 +26,13 @@ class AccessActions(object):
                                     ("Role", user_data.role)])
         return profile_dict
 
-    def login_data(self, data, username):
+    def login_data(self, data, username, user_id):
         stock_history_obj = self.stock_history.get_histories(dict(user_id=data.id))
         stock_history_list = list()
         for stock_history in stock_history_obj:
             stock_history_list.append(self.to_dict(stock_history))
-        response = Response(render_template("stock_history.html", name=username, stock_history=stock_history_list),
-                            mimetype='text/html')
+        response = Response(render_template("stock_history.html", name=username, stock_history=stock_history_list,
+                                            user_id=user_id), mimetype='text/html')
         return response
 
     def profile_data(self, name):
@@ -64,7 +64,7 @@ class AccessActions(object):
                 session["user_id"] = data.id
                 update_dict = dict(expiry_time=datetime.utcnow() + timedelta(hours=1))
                 self.user_api.update(update_dict, dict(username=username, password=password))
-                return self.login_data(data, username)
+                return self.login_data(data, username, user_id=data.id)
             else:
                 raise Exception("Invalid Username/Password")
         except Exception as e:

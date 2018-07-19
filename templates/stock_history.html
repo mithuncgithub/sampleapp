@@ -28,6 +28,31 @@
     </style>
   </head>
   <body>
+  <script type="text/javascript"
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script> $(function() { var submit_form = function(e) {
+                         $.getJSON('/stock/view', {
+                         symbol: $('input[name="symbol"]').val()
+                         }, function(data) {
+        $('#symbol').text(data.symbol);
+        $('#price').text(data.price);
+        $('#volume').text(data.volume);
+        $('#timestamp').text(data.timestamp);
+        $("#buy_symbol").val(data.symbol);
+        $("#sell_symbol").val(data.symbol);
+        $('input[name=symbol]').focus().select();
+      });
+      return false;
+    };
+    $('a#calculate').bind('click', submit_form);
+
+    $('input[type=text]').bind('keydown', function(e) {
+      if (e.keyCode == 13) {
+        submit_form(e);
+      }
+    });
+
+    $('input[name=symbol]').focus();});</script>
   <h1 class="Stock">Stock</h1>
   <hr>
   <p class="user">Welcome {{name}}</p>
@@ -39,11 +64,45 @@
   </form>
   <br>
   <br>
-  <form action="http://localhost:5000/stock/view" method="get">
-    Ticker Symbol:<input type="text" name="symbol">
-    <input type="submit" value="Get Quote">
+  <p align="center"> Ticker Symbol : <input type="text" name="symbol">
+    <a href=# id="calculate">Get Quote</a></p>
+
+  <br>
+  <p align="center"><b>Stock Quote</b></p>
+  <table>
+  <!-- table header -->
+  <tr>
+    <th> Symbol </th>
+    <th> Price </th>
+    <th> Volume </th>
+    <th> Timestamp </th>
+  </tr>
+  <!-- table rows -->
+  <tr>
+    <td><span id="symbol"></span></td>
+    <td><span id="price"></span></td>
+    <td><span id="volume"></span></td>
+    <td><span id="timestamp"></span></td>
+  </tr>
+  </table>
+  <form onsubmit="return confirm('Do you really want to buy the stock');"
+        action="http://localhost:5000/stock/buy" method="post">
+      <input type="hidden" value="{{user_id}}" name="id">
+      <input type="hidden" id="buy_symbol" value="" name="symbol">
+      <input type="hidden" value=1 name="buy_flag">
+      Quantity<input type="number" min="0" name="quantity" value="0">
+      <input type="submit" value="Buy">
   </form>
-  <br><br>
+  <form onsubmit="return confirm('Do you really want to sell the stock');"
+        action="http://localhost:5000/stock/buy" method="post">
+      <input type="hidden" value="{{user_id}}" name="id">
+      <input type="hidden" id="sell_symbol" value="" name="symbol">
+      <input type="hidden" value=0 name="buy_flag">
+      Quantity<input type="number" min="0" name="quantity" value="0">
+      <input type="submit" value="Sell">
+  </form>
+    <br><br>
+    <p align="center"><b>Stock History</b></p>
   <table>
   <!-- table header -->
   {% if stock_history %}
@@ -63,7 +122,7 @@
   </tr>
   {% endfor %}
 </table>
-  <br><br><br><br>
+  <br><br>
   {% block content %}
     {% endblock %}
   </body>

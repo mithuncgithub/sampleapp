@@ -34,12 +34,15 @@ class Stock(Resource):
     @auth
     def post(self, action=None):
         try:
-            symbol = str(request.form.get("symbol")).upper()
+            self.definitions.url = "login?action=redirect"
+            symbol = str(request.form.get("symbol"))
+            if not symbol:
+                raise Exception("Symbol is mandatory")
             quantity = int(request.form.get("quantity"))
             user_id = int(request.form.get("id"))
             buy_flag = request.form.get("buy_flag")
             if action == "buy":
-                self.definitions.url = "stock/view?symbol=%s" % symbol
+                symbol = symbol.upper()
                 return self.stockactions.buy_sell_stock(symbol, quantity, user_id, buy_flag)
             else:
                 raise Exception("Url Not found")

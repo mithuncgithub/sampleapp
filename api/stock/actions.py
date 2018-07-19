@@ -2,7 +2,7 @@ from alpha_vantage.timeseries import TimeSeries
 from collections import OrderedDict
 from datetime import datetime
 from datetime import timedelta
-from flask import session, render_template, Response, redirect
+from flask import session, render_template, Response, redirect, jsonify
 
 from api.login.actions import AccessActions
 from db.db_conn import StockAggregateApi
@@ -19,7 +19,7 @@ class StockActions(object):
         self.stock_aggregate_api = StockAggregateApi()
         self.redis_conn = redis_db()
 
-    def view_stock(self, symbol, internal=False):
+    def view_stock(self, symbol):
         try:
             if not symbol:
                 raise Exception("Symbol is mandatory and it cannot be empty")
@@ -39,11 +39,7 @@ class StockActions(object):
                 stock_quote = OrderedDict([("symbol", symbol), ("price", average_cost),
                                            ("volume", req_data["5. volume"]), ("timestamp", latest_time)])
                 self.redis_conn.hmset(symbol, stock_quote)
-            if internal:
-                return stock_quote
-            return Response(render_template("stock_quote.html", stock_quote=stock_quote, name=session["username"],
-                                            user_id=session["user_id"]), mimetype='text/html')
-            # return stock_quote
+            return stock_quote
         except Exception as e:
             raise Exception(e)
 
@@ -86,7 +82,7 @@ class StockActions(object):
         try:
             if not float(quantity):
                 raise Exception("Provide a valid quantity")
-            view_stock = self.view_stock(symbol=symbol, internal=True)
+            view_stock = self.view_stock(symbol=symbol)
             user_details = self.user_api.get_user(dict(id=user_id))
             if not user_details:
                 raise Exception("User not found")

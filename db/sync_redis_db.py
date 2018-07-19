@@ -13,7 +13,7 @@ for key in keys:
     try:
         stock_data, info = ts.get_intraday(symbol=key, interval="60min", outputsize="compact")
         print("Updated for %s" % key)
-        time.sleep(15)
+        time.sleep(25)
     except:
         print("Failed for %s" % key)
         continue
