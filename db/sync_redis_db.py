@@ -24,7 +24,7 @@ for key in keys:
     req_data = stock_data[latest_time]
     high = req_data["2. high"]
     low = req_data["3. low"]
-    average_cost = (float(high) + float(low)) / 2
+    average_cost = round((float(high) + float(low))/2, 2)
     stock_quote = OrderedDict([("symbol", key), ("price", average_cost),
                                ("volume", req_data["5. volume"]), ("timestamp", latest_time)])
     conn.hmset(key, stock_quote)
