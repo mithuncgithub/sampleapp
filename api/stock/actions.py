@@ -119,11 +119,13 @@ class StockActions(object):
             if stock_user_id != user_id and user_data.role != "admin":
                 raise Exception("Permission denied")
             stock_aggregate_data = self.stock_aggregate_api.get_aggregate(dict(user_id=stock_user_id))
+            stock_user_data = self.user_api.get_user(dict(id=stock_user_id))
             if not stock_aggregate_data:
                 raise Exception("No stocks available for the user")
             stock_data = stock_aggregate_data.stock_data
             response = Response(render_template("stock_aggregate.html", name=session.get("username"),
-                                                stock_aggregate=stock_data), mimetype='text/html')
+                                                stock_aggregate=stock_data, stock_user=stock_user_data.username),
+                                mimetype='text/html')
             return response
         except Exception as e:
             raise Exception(e)
