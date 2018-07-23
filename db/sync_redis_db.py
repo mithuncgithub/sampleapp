@@ -17,7 +17,7 @@ for key in keys:
     except:
         print("Failed for %s" % key)
         continue
-    latest_time = str(datetime.utcnow() - timedelta(days=3))
+    latest_time = str(datetime.utcnow() - timedelta(days=5))
     for k, v in stock_data.items():
         if k > latest_time:
             latest_time = k
