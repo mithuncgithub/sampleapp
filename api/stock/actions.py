@@ -2,7 +2,7 @@ from alpha_vantage.timeseries import TimeSeries
 from collections import OrderedDict
 from datetime import datetime
 from datetime import timedelta
-from flask import session, render_template, Response, redirect, jsonify
+from flask import session, render_template, Response, redirect
 
 from api.login.actions import AccessActions
 from db.db_conn import StockAggregateApi
